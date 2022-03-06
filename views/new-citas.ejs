@@ -1,0 +1,30 @@
+<%- include("templates/header", {tituloWeb: 'Crear Cita'}) %>
+<body>
+  <h1 class="text-center"><%= title %></h1>
+   <div class="container p-4">
+      <form target="/crear-cita" method="POST" class="card card-body">
+         <div class="form-group p-2">
+            <label for="nombre">Nombre</label>
+            <input id="nombre" type="text" name="nombre" class="form-control" placeholder="Tú Nombre" required/>
+         </div>
+         <div class="form-group p-2">
+            <label for="apellido">Apellido</label>
+            <input id="apellido" type="text" name="apellido" class="form-control" placeholder="Tú Apellido" required/>
+         </div>
+         <div class="form-group p-2">
+            <label for="edad">Edad</label>
+            <input id="edad" type="text" name="edad" class="form-control" placeholder="Tú Edad" required/>
+         </div>
+         <div class="form-group p-2">
+            <label for="fecha">Fecha</label>
+            <input id="fecha" type="date" name="fecha" class="form-control" required/>
+         </div>
+         <div class="form-group p-2">
+            <label for="hora">Hora</label>
+            <input id="hora" type="time" name="hora" class="form-control" required/>
+         </div>
+         <input type="submit" value="Guardar Cita" class="btn btn-primary">
+      </form>
+   </div>
+</body>
+<%- include("templates/footer") %>

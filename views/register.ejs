@@ -1,0 +1,30 @@
+<%- include("templates/header", {tituloWeb: 'Registrar'}) %>
+<body>
+  <h1 class="text-center"><%= title %></h1>
+   <div class="container p-4">
+      <form target="/register" method="POST" class="card card-body">
+         <div class="form-group p-2">
+            <label for="nombre">Nombre</label>
+            <input id="nombre" type="text" name="nombre" class="form-control" placeholder="Tú Nombre" required/>
+         </div>
+         <div class="form-group p-2">
+            <label for="apellido">Apellido</label>
+            <input id="apellido" type="text" name="apellido" class="form-control" placeholder="Tú Apellido" required/>
+         </div>
+         <div class="form-group p-2">
+            <label for="edad">Edad</label>
+            <input id="edad" type="number" min="6" max="85" name="edad" class="form-control" placeholder="Tú Edad" required/>
+         </div>
+         <div class="form-group p-2">
+            <label for="email">Email</label>
+            <input id="email" type="email" name="email" class="form-control" placeholder="correo@correo.com" required/>
+         </div>
+         <div class="form-group p-2">
+            <label for="password">Password</label>
+            <input id="password" type="password" name="password" class="form-control" placeholder="Password" required/>
+         </div>
+         <input type="submit" value="Crear Usuario" class="btn btn-dark">
+      </form>
+   </div>
+</body>
+<%- include("templates/footer") %>
