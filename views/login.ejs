@@ -1,30 +1,32 @@
 <%- include("templates/header", {tituloWeb: 'Iniciar Sesion'}) %>
 <body>
-  <h1 class="text-center"><%= title %></h1>
+  <h1 class="text-center p-4"><%= title %></h1>
    <div class="container p-4">
       <div class="row">
          <div class="col">
-            <form target="/user" method="POST" class="card card-body">
+            <h3 class="text-center">Usuario</h3>
+            <form target="/login" method="POST" class="card card-body">
                <div class="form-group p-2">
                   <label for="email">Email</label>
-                  <input id="email" type="email" name="email" class="form-control" placeholder="correo@correo.com" required/>
+                  <input id="email" type="email" name="EmailUser" class="form-control" placeholder="correo@correo.com" required/>
                </div>
                <div class="form-group p-2">
                   <label for="password">Password</label>
-                  <input id="password" type="password" name="password" class="form-control" placeholder="Password" required/>
+                  <input id="password" type="password" name="PasswordUser" class="form-control" placeholder="Password" required/>
                </div>
                <input type="submit" value="Iniciar Sesion" class="btn btn-dark">
             </form>
          </div>
          <div class="col">
-            <form target="/admin" method="POST" class="card card-body">
+            <h3 class="text-center">Administrador</h3>
+            <form target="/login" method="POST" class="card card-body">
                <div class="form-group p-2">
                   <label for="email">Email</label>
-                  <input id="email" type="email" name="email" class="form-control" placeholder="correo@correo.com" required/>
+                  <input id="email" type="email" name="EmailUser" class="form-control" placeholder="correo@correo.com" required/>
                </div>
                <div class="form-group p-2">
                   <label for="password">Password</label>
-                  <input id="password" type="password" name="password" class="form-control" placeholder="Password" required/>
+                  <input id="password" type="password" name="PasswordUser" class="form-control" placeholder="Password" required/>
                </div>
                <input type="submit" value="Iniciar Sesion" class="btn btn-dark">
             </form>

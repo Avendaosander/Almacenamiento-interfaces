@@ -13,7 +13,7 @@ const options = {
    host: 'localhost',
    port: '3306',
    user: 'root',
-   password: '',
+   password: 'password',
    database: 'citas_db'
 }
 const sessionStore = new MySQLStore(options)

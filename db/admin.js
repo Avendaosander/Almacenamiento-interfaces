@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize')
 
 module.exports = (connection) => {
-   const users = connection.define('users', {
+   const admins = connection.define('admins', {
       IDUser: {
          type: DataTypes.INTEGER(11),
          allowNull: false,
@@ -31,6 +31,10 @@ module.exports = (connection) => {
       EdadUser: {
          type: DataTypes.INTEGER(2),
          allowNull: false
+      },
+      TelefonoUser: {
+         type: DataTypes.STRING(255),
+         allowNull: false
       }
    },{
       createdAt:"CreatedUserDate",
@@ -41,5 +45,5 @@ module.exports = (connection) => {
          }
       ]
    })
-   return { users }
+   return { admins }
 }

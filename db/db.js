@@ -1,5 +1,7 @@
 const { Sequelize, Op, fn } = require("sequelize");
-const UserModel = require('./user')
+const CitasModel = require('./cita')
+const UsersModel = require('./user')
+const AdminsModel = require('./admin')
 
 const config = {
    HOST: process.env.DB_HOST,
@@ -19,15 +21,17 @@ const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD,{
    host: config.HOST,
    dialect: config.dialect,
    operatorsAliases: 0,
-   pool: config.pool
+   pool: config.pool,
+   storage: './citas_db.sql'
 })
 
-sequelize.sync({force: process.env.DB_FORCE})
-   .then(()=>{alert('Tabla Sincronizada')})
+sequelize.sync({force: process.env.DB_FORCE === "false"})
 
 module.exports = {
    database: sequelize,
-   tables: UserModel(sequelize),
+   tablesCitas: CitasModel(sequelize),
+   tablesUsers: UsersModel(sequelize),
+   tablesAdmins: AdminsModel(sequelize),
    op: Op,
-   fn
+   fn: fn
 }

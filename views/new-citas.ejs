@@ -1,6 +1,6 @@
 <%- include("templates/header", {tituloWeb: 'Crear Cita'}) %>
 <body>
-  <h1 class="text-center"><%= title %></h1>
+  <h1 class="text-center p-4"><%= title %></h1>
    <div class="container p-4">
       <form target="/crear-cita" method="POST" class="card card-body">
          <div class="form-group p-2">
@@ -12,8 +12,12 @@
             <input id="apellido" type="text" name="apellido" class="form-control" placeholder="Tú Apellido" required/>
          </div>
          <div class="form-group p-2">
+            <label for="cedula">Cedula</label>
+            <input id="cedula" type="number" name="cedula" class="form-control" placeholder="Tú Cedula" required/>
+         </div>
+         <div class="form-group p-2">
             <label for="edad">Edad</label>
-            <input id="edad" type="text" name="edad" class="form-control" placeholder="Tú Edad" required/>
+            <input id="edad" type="number" min="6" max="85" name="edad" class="form-control" placeholder="Tú Edad" required/>
          </div>
          <div class="form-group p-2">
             <label for="fecha">Fecha</label>
@@ -25,6 +29,9 @@
          </div>
          <input type="submit" value="Guardar Cita" class="btn btn-primary">
       </form>
+      <% if (typeof error !== 'undefined') { %> 
+         <h3 class="text-center p-4"><%= error %> </h3>
+      <% } %> 
    </div>
 </body>
 <%- include("templates/footer") %>

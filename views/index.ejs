@@ -2,10 +2,34 @@
 <body>
    <h1 class="text-center">Almacenamiento e Interfaces</h1>
    <h4 class="text-center"><%= title %></h4>
-   <div class="container">
-      <div class="row">
-         <!-- <%  %> -->
-      </div>
+   <div class="container p-4 text-center">
+      <% if (rol == 'user') { %> 
+         <div class="row">
+            <div class="col">
+               <button class="btn btn-info">Crear Cita</button>
+            </div>
+            <div class="col">
+               <button class="btn btn-primary">Ver Citas</button>
+            </div>
+            <!-- <button class="btn btn-success">Mis Citas</button> -->
+         </div>
+      <% } %> 
+      <% if (rol == 'admin') { %> 
+         <div class="row">
+            <div class="col">
+               <button class="btn btn-info">Crear Cita</button>
+            </div>
+            <div class="col">
+               <button class="btn btn-primary">Ver Citas</button>
+            </div>
+            <div class="col">
+               <button class="btn btn-warning">Editar Citas</button>
+            </div>
+            <div class="col">
+               <button class="btn btn-danger">Eliminar Citas</button>
+            </div>
+         </div>
+      <% } %> 
    </div>
 </body>
 <%- include("templates/footer") %>

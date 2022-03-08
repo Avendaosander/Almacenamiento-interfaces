@@ -1,6 +1,6 @@
 <%- include("templates/header", {tituloWeb: 'Registrar'}) %>
 <body>
-  <h1 class="text-center"><%= title %></h1>
+  <h1 class="text-center p-4"><%= title %></h1>
    <div class="container p-4">
       <form target="/register" method="POST" class="card card-body">
          <div class="form-group p-2">
@@ -16,15 +16,26 @@
             <input id="edad" type="number" min="6" max="85" name="edad" class="form-control" placeholder="Tú Edad" required/>
          </div>
          <div class="form-group p-2">
+            <label for="cedula">Cedula</label>
+            <input id="cedula" type="number" name="cedula" class="form-control" placeholder="Tú Cedula" required/>
+         </div>
+         <div class="form-group p-2">
             <label for="email">Email</label>
             <input id="email" type="email" name="email" class="form-control" placeholder="correo@correo.com" required/>
          </div>
          <div class="form-group p-2">
             <label for="password">Password</label>
-            <input id="password" type="password" name="password" class="form-control" placeholder="Password" required/>
+            <input id="password" type="password" name="password" class="form-control" required/>
+         </div>
+         <div class="form-group p-2">
+            <label for="telefono">Telefono</label>
+            <input id="telefono" type="text" name="telefono" class="form-control" placeholder="Tú Telefono"/>
          </div>
          <input type="submit" value="Crear Usuario" class="btn btn-dark">
       </form>
+      <% if (typeof error !== 'undefined') { %> 
+         <h3 class="text-center p-4"><%= error %> </h3>
+      <% } %> 
    </div>
 </body>
 <%- include("templates/footer") %>
