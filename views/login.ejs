@@ -5,7 +5,7 @@
       <div class="row">
          <div class="col">
             <h3 class="text-center">Usuario</h3>
-            <form target="/login" method="POST" class="card card-body">
+            <form target="/login/user" method="POST" class="card card-body">
                <div class="form-group p-2">
                   <label for="email">Email</label>
                   <input id="email" type="email" name="EmailUser" class="form-control" placeholder="correo@correo.com" required/>
@@ -14,12 +14,14 @@
                   <label for="password">Password</label>
                   <input id="password" type="password" name="PasswordUser" class="form-control" placeholder="Password" required/>
                </div>
+               <input id="rol" type="text" value="user" hidden name="rol" class="form-control" required/>
                <input type="submit" value="Iniciar Sesion" class="btn btn-dark">
             </form>
+            <a href="/register/user" class="btn btn-outline-secondary m-3">Registrar como Usuario</a>
          </div>
          <div class="col">
             <h3 class="text-center">Administrador</h3>
-            <form target="/login" method="POST" class="card card-body">
+            <form target="/login/admin" method="POST" class="card card-body">
                <div class="form-group p-2">
                   <label for="email">Email</label>
                   <input id="email" type="email" name="EmailUser" class="form-control" placeholder="correo@correo.com" required/>
@@ -28,8 +30,10 @@
                   <label for="password">Password</label>
                   <input id="password" type="password" name="PasswordUser" class="form-control" placeholder="Password" required/>
                </div>
+               <input id="rol" type="text" value="admin" hidden name="admin" class="form-control" required/>
                <input type="submit" value="Iniciar Sesion" class="btn btn-dark">
             </form>
+            <a href="/register/admin" class="btn btn-outline-secondary m-3">Registrar como Administrador</a>
          </div>
       </div>
    </div>

@@ -6,27 +6,27 @@
       <% if (rol == 'user') { %> 
          <div class="row">
             <div class="col">
-               <button class="btn btn-info">Crear Cita</button>
+               <a href="/crear-cita/:user" class="btn btn-info">Crear Cita</a>
             </div>
             <div class="col">
-               <button class="btn btn-primary">Ver Citas</button>
+               <a href="/citas/:user" class="btn btn-primary">Ver Citas</a>
             </div>
-            <!-- <button class="btn btn-success">Mis Citas</button> -->
+            <!-- <a href="" class="btn btn-success">Mis Citas</a> -->
          </div>
       <% } %> 
       <% if (rol == 'admin') { %> 
          <div class="row">
             <div class="col">
-               <button class="btn btn-info">Crear Cita</button>
+               <a href="/crear-cita/:admin" class="btn btn-info">Crear Cita</a>
             </div>
             <div class="col">
-               <button class="btn btn-primary">Ver Citas</button>
+               <a href="/citas/:admin" class="btn btn-primary">Ver Citas</a>
             </div>
             <div class="col">
-               <button class="btn btn-warning">Editar Citas</button>
+               <a href="/users/:admin" class="btn btn-warning">Editar Usuarios</a>
             </div>
             <div class="col">
-               <button class="btn btn-danger">Eliminar Citas</button>
+               <a href="/users/:admin" class="btn btn-danger">Eliminar Usuarios</a>
             </div>
          </div>
       <% } %> 

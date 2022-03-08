@@ -6,7 +6,6 @@ const logger = require('morgan');
 const session = require('express-session');
 
 const indexRouter = require('./routes/index');
-// const usersRouter = require('./routes/users');
 
 const MySQLStore = require('express-mysql-session')
 const options = {
@@ -36,13 +35,7 @@ app.use(session({
    resave: false,
    saveUninitialized: false
 }))
-// app.use((req, res) => {
-//    res.status(404).render("404", {
-//       "titulo": "404",
-//       "descripcion": "Pagina Web no existe"
-//    })
-// })
+
 app.use('/', indexRouter);
-// app.use('/users', usersRouter);
 
 module.exports = app;

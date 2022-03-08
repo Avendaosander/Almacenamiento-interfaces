@@ -1,49 +1,53 @@
 const express = require('express');
 const router = express.Router();
-const { validarUser, validarCampos, validarUpdate } = require('../validators/validator')
+const bcrypt = require("bcryptjs");
 const { tablesUsers, tablesCitas, tablesAdmins } = require('../db/db');
+const { validarUser, validarCampos, validarUpdate, validarUpdateUser } = require('../validators/validator')
+const { usuario, usaurioAdmin } = require('../controllers/users')
+const { cita } = require('../controllers/citas')
 
 /* GET home page. */
 router.get('/home/:rol', function(req, res) { /* rol = Admin || User */
   res.render('index', { title: req.params.rol=='admin'?'Administrador':'Usuario', rol: req.params.rol});
 });
 
-router.get('/register', (req, res) => {
-  res.status(200).render('register', { title: 'Registrar nuevo usuario'})
+router.get('/register/:rol', (req, res) => {
+  res.status(200).render('register', { title: 'Registrar nuevo usuario', rol: req.params.rol})
 })
 
-router.post('/register', validarUser, (req, res) => {
-  const { nombre, apellido, edad, cedula, email, password } = req.body
-  if (typeof req.body.telefono !== 'undefined' && req.body.telefono !== '') {
-    const { telefono } = req.body
-    console.log(telefono)
+router.post('/register/:rol', validarUser, (req, res) => {
+  if (req.params.rol === 'admin') {
+    let UserAdminClass = new usaurioAdmin(req, res)
+    let passwordHash = bcrypt.hashSync(UserAdminClass.password, 10);
     tablesAdmins.admins.findOrCreate({
       where: {
-        CedulaUser:cedula
+        EmailUser:UserAdminClass.email, CedulaUser:UserAdminClass.cedula
       },
       defaults: {
-        NombreUser:nombre, ApellidoUser:apellido, EmailUser:email, PasswordUser:password, CedulaUser:cedula, EdadUser:edad, TelefonoUser:telefono
+        NombreUser:UserAdminClass.nombre, ApellidoUser:UserAdminClass.apellido, EmailUser:UserAdminClass.email, PasswordUser:passwordHash, CedulaUser:UserAdminClass.cedula, EdadUser:UserAdminClass.edad, TelefonoUser:UserAdminClass.telefono
       }
     }).then(([user, created])=>{
       if (created) {
-        res.status(200).render('index', { title: 'Administrador', rol: 'admin'});
+        res.status(200).render('index', { title: 'Administrador', rol: req.params.rol});
       } else {
         res.status(400).render('register', { title: 'Registrar un nuevo Administrador', error: 'El Administrador de cedula: '+user.dataValues.CedulaUser+' ya está registrado en el sistema' });
       }
     }).catch((err)=>{
       res.status(500).render('error', { user:'', users: [], error: err });
     })
-  } else{
+  } else {
+    let UserClass = new usuario(req, res)
+    let passwordHash = bcrypt.hashSync(UserClass.password, 10);
     tablesUsers.users.findOrCreate({
       where: {
-        EmailUser:email ,CedulaUser:cedula
+        EmailUser:UserClass.email ,CedulaUser:UserClass.cedula
       },
       defaults: {
-        NombreUser:nombre, ApellidoUser:apellido, EmailUser:email, PasswordUser:password, CedulaUser:cedula, EdadUser:edad
+        NombreUser:UserClass.nombre, ApellidoUser:UserClass.apellido, EmailUser:UserClass.email, PasswordUser:passwordHash, CedulaUser:UserClass.cedula, EdadUser:UserClass.edad
       }
     }).then(([user, created])=>{
       if (created) {
-        res.status(200).render('index', { title: 'Usuario', rol: 'user'});
+        res.status(200).render('index', { title: 'Usuario', rol: req.params.rol});
       } else {
         res.status(400).render('register', { title: 'Registrar un nuevo usuario', error: 'El usuario de cedula: '+user.dataValues.CedulaUser+' ya está registrado en el sistema' });
       }
@@ -51,7 +55,6 @@ router.post('/register', validarUser, (req, res) => {
       res.status(500).render('error', { user:'', users: [], error: err });
     })
   }
-
 })
 
 router.get('/login', function(req, res) {
@@ -60,19 +63,54 @@ router.get('/login', function(req, res) {
 
 router.post('/login', function(req, res) {
   if(req.body.EmailUser && req.body.PasswordUser) {
-    tablesUsers.users.findAll({
-      where: { EmailUser: req.body.EmailUser }
-    }).then(([citaData])=>{
-      if (citaData.dataValues.EmailUser === req.body.EmailUser && citaData.dataValues.PasswordUser === req.body.PasswordUser) {
-        res.status(200).render('index', { title: "Bienvenido", rol: 'user'});
-      }
-    }).catch((err)=>{
-      res.status(500).render('error', { user:'', users: [], error: err });
-    })
+    if (req.body.rol === 'user') {
+      tablesUsers.users.findAll({
+        where: { EmailUser: req.body.EmailUser }
+      }).then(([citaData])=>{
+        bcrypt.compare(req.body.PasswordUser, citaData.dataValues.PasswordUser, function(err, resp) {
+          if (resp) {
+            res.status(200).render('index', { title: "Bienvenido", rol: req.body.rol});
+          } else {
+            res.status(500).render('error', { user:'', users: [], error: 'Contraseña es incorrecta' });
+          }
+        });
+      }).catch((err)=>{
+        res.status(500).render('error', { user:'', users: [], error: err });
+      })
+    } else {
+      console.log(req.body)
+      tablesAdmins.admins.findAll({
+        where: { EmailUser: req.body.EmailUser }
+      }).then(([citaData])=>{
+        bcrypt.compare(req.body.PasswordUser, citaData.dataValues.PasswordUser, function(err, resp) {
+          if (resp) {
+            res.status(200).render('index', { title: "Bienvenido", rol: req.body.rol});
+          } else {
+            res.status(500).render('error', { user:'', users: [], error: 'Contraseña es incorrecta' });
+          }
+        });
+      }).catch((err)=>{
+        res.status(500).render('error', { user:'', users: [], error: err });
+      })
+    }
   }
 });
 
-router.get('/citas', function(req, res) {
+router.get('/users/:rol', function(req, res) {
+  tablesUsers.users.findAll({
+    attributes: [ 'NombreUser','ApellidoUser','CedulaUser','EdadUser','EmailUser','PasswordUser' ],
+    order: [
+      ['CedulaUser', 'DESC']
+    ],
+    raw: true
+  }).then((useData)=>{
+    res.status(200).render('users', { title: 'Usuarios', users: useData, error: '', rol: req.params.rol});
+  }).catch((err)=>{
+    res.render('error', { users: [], error: err });
+  })
+});
+
+router.get('/citas/:rol', function(req, res) {
   tablesCitas.citas.findAll({
     attributes: [ 'NombreCita','ApellidoCita','CedulaCita','EdadCita','FechaCita','HoraCita' ],
     order: [
@@ -80,26 +118,24 @@ router.get('/citas', function(req, res) {
     ],
     raw: true
   }).then((citaData)=>{
-    console.log(citaData)
-    res.status(200).render('citas', { title: 'Citas Próximas', citas: citaData, error: ''});
+    res.status(200).render('citas', { title: 'Citas Próximas', citas: citaData, error: '', rol: req.params.rol});
   }).catch((err)=>{
     res.render('error', { citas: [], error: err });
   })
 });
 
-router.get('/crear-cita', (req, res) => {
-  res.status(200).render('new-citas', { title: 'Crear una nueva cita'})
+router.get('/crear-cita/:rol', (req, res) => {
+  res.status(200).render('new-citas', { title: 'Crear una nueva cita', rol: req.params.rol})
 })
 
-router.post('/crear-cita', validarCampos, (req, res) => {
-  const { nombre, apellido, cedula, edad, fecha, hora } = req.body
-
+router.post('/crear-cita/:rol', validarCampos, (req, res) => {
+  let CitaClass = new cita(req, res)
   tablesCitas.citas.findOrCreate({
     where: {
-      CedulaCita:cedula
+      CedulaCita:CitaClass.cedula
     },
     defaults: {
-      NombreCita:nombre, ApellidoCita:apellido, CedulaCita:cedula, EdadCita:edad, FechaCita:fecha, HoraCita:hora
+      NombreCita:CitaClass.nombre, ApellidoCita:CitaClass.apellido, CedulaCita:CitaClass.cedula, EdadCita:CitaClass.edad, FechaCita:CitaClass.fecha, HoraCita:CitaClass.hora
     }
   }).then(([cita, created])=>{
     console.log(created)
@@ -111,7 +147,7 @@ router.post('/crear-cita', validarCampos, (req, res) => {
         ],
         raw: true
       }).then((citaData)=>{
-        res.status(200).render('citas', { title: 'Citas Próximas', cita: cita , citas: citaData, error: ''});
+        res.status(200).render('citas', { title: 'Citas Próximas', cita: cita , citas: citaData, error: '', rol: req.params.rol});
       }).catch((err)=>{
         res.status(500).render('error', { cita:'', citas: [], error: err });
       })
@@ -124,11 +160,11 @@ router.post('/crear-cita', validarCampos, (req, res) => {
   })
 })
 
-router.get('/editar-cita/:cedula', (req, res)=>{
+router.get('/editar-cita/:cedula/:rol', (req, res)=>{
   tablesCitas.citas.findAll({
     where: { CedulaCita: req.params.cedula }
   }).then(([citaData])=>{
-    res.status(200).render('update-cita', { title: 'Editar Cita', citas: citaData.dataValues, error: ''});
+    res.status(200).render('update-cita', { title: 'Editar Cita', citas: citaData.dataValues, error: '', rol: req.params.rol});
   }).catch((err)=>{
     res.render('error', { citas: [], error: err });
   })
@@ -148,28 +184,28 @@ router.get('/borrar-cita/:cedula/:rol', async (req, res)=>{
   res.status(200).render('index', { title: req.params.rol=='admin'?'Administrador':'Usuario', rol: req.params.rol})
 })
 
-router.get('/editar-user/:cedula', (req, res)=>{
+router.get('/editar-user/:cedula/:rol', (req, res)=>{
   tablesUsers.users.findAll({
     where: { CedulaUser: req.params.cedula }
-  }).then(([citaData])=>{
-    res.status(200).render('update-user', { title: 'Editar Usuario', citas: citaData.dataValues, error: ''});
+  }).then(([userData])=>{
+    res.status(200).render('update-user', { title: 'Editar Usuario', users: userData.dataValues, error: '', rol: req.params.rol});
   }).catch((err)=>{
-    res.render('error', { citas: [], error: err });
+    res.render('error', { users: [], error: err });
   })
 })
 
-router.post('/editar-user/:cedula', validarUpdate, async (req, res)=>{
+router.post('/editar-user/:cedula/:rol', validarUpdateUser, async (req, res)=>{
   await tablesUsers.users.update(req.body, {
     where: { CedulaUser: req.params.cedula }
   })
-  res.status(200).render('index', { title: 'Administrador', rol: 'admin'})
+  res.status(200).render('index', { title: 'Administrador', rol: req.params.rol})
 })
 
-router.get('/borrar-cita/:cedula', async (req, res)=>{
+router.get('/borrar-user/:cedula/:rol', async (req, res)=>{
   await tablesUsers.users.destroy({
     where: { CedulaUser: req.params.cedula }
   })
-  res.status(200).render('index', { title: 'Administrador', rol: 'admin'})
+  res.status(200).render('index', { title: 'Administrador', rol: req.params.rol})
 })
 
 module.exports = router;

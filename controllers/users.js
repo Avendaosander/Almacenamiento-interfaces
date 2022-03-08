@@ -1,11 +1,11 @@
 class usuario{
    constructor(req, res){
-      this.nombre = req.body.nombreUser;
-      this.apellido = req.body.apellidoUser;
-      this.email = req.body.emailUser;
-      this.password = req.body.passwordUser;
-      this.cedula = req.body.cedulaUser
-      this.edad = req.body.edadUser
+      this.nombre = req.body.nombre;
+      this.apellido = req.body.apellido;
+      this.email = req.body.email;
+      this.password = req.body.password;
+      this.cedula = req.body.cedula
+      this.edad = req.body.edad
    }
 
    set Nombre(value){
@@ -31,7 +31,7 @@ class usuario{
 class usaurioAdmin extends usuario{
    constructor(req,res){
       super(req,res);
-      this.telefono = req.body.telefonoUser;
+      this.telefono = req.body.telefono;
    }
 
    set Telefono(value){

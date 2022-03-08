@@ -1,11 +1,11 @@
 class cita{
    constructor(req, res){
-      this.nombre = req.body.nombreCita;
-      this.apellido = req.body.apellidoCita;
-      this.cedula = req.body.cedulaCita
-      this.edad = req.body.edadCita
-      this.fecha = req.body.fechaCita;
-      this.hora = req.body.horaCita;
+      this.nombre = req.body.nombre;
+      this.apellido = req.body.apellido;
+      this.cedula = req.body.cedula
+      this.edad = req.body.edad
+      this.fecha = req.body.fecha;
+      this.hora = req.body.hora;
    }
 
    set Nombre(value){
@@ -17,7 +17,7 @@ class cita{
    set Fecha(value){
       this.fecha = value
    }
-   set hora(value){
+   set Hora(value){
       this.hora = value
    }
    set Cedula(value){
@@ -28,15 +28,4 @@ class cita{
    }
 }
 
-class citaAdmin extends cita{
-   constructor(req,res){
-      super(req,res);
-      this.prioridad = req.body.prioridadCita;
-   }
-
-   set Prioridad(value){
-      this.prioridad = value
-   }
-}
-
-module.exports = { cita, citaAdmin };
+module.exports = { cita };

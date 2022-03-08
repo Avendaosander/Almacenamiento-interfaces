@@ -1,21 +1,21 @@
-<%- include("templates/header", {tituloWeb: 'Citas'}) %>
+<%- include("templates/header", {tituloWeb: 'Usuarios'}) %>
 <body>
    <h1 class="text-center p-4"><%= title %></h1>
    <div class="container p-4">
       <div class="row">
-         <% if (citas.length > 0) { %>
-            <% citas.forEach( cita => { %>
+         <% if (users.length > 0) { %>
+            <% users.forEach( user => { %>
                <div class="col-md-4 p-2">
                   <div class="card">
                      <div class="card-header">
-                        <%= cita.NombreCita %> <%= cita.ApellidoCita %> - <%= cita.CedulaCita %>
+                        <%= user.NombreUser %> <%= user.ApellidoUser %> - <%= user.CedulaUser %> / <%= user.EdadUser %>
                      </div>
                      <div class="card-body">
-                        <%= cita.EdadCita %> / <%= cita.FechaCita %> / <%= cita.HoraCita %>
+                        <%= user.EmailUser %> / <%= user.PasswordUser %>
                      </div>
                      <div class="card-footer justify-content-around">
-                        <a href="/borrar-cita/<%= cita.CedulaCita %>/<%= rol %>" class="btn btn-danger"> Delete </a>
-                        <a href="/editar-cita/<%= cita.CedulaCita %>/<%= rol %>" class="btn btn-warning"> Editar </a>
+                        <a href="/borrar-user/<%= user.CedulaUser %>/admin" class="btn btn-danger"> Delete </a>
+                        <a href="/editar-user/<%= user.CedulaUser %>/admin" class="btn btn-warning"> Editar </a>
                      </div>
                   </div>
                </div>

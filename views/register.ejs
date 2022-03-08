@@ -2,7 +2,7 @@
 <body>
   <h1 class="text-center p-4"><%= title %></h1>
    <div class="container p-4">
-      <form target="/register" method="POST" class="card card-body">
+      <form target="/register/<%= rol %>" method="POST" class="card card-body">
          <div class="form-group p-2">
             <label for="nombre">Nombre</label>
             <input id="nombre" type="text" name="nombre" class="form-control" placeholder="Tú Nombre" required/>
@@ -25,12 +25,14 @@
          </div>
          <div class="form-group p-2">
             <label for="password">Password</label>
-            <input id="password" type="password" name="password" class="form-control" required/>
+            <input id="password" type="password" name="password" class="form-control" placeholder="Tu Password" required/>
          </div>
-         <div class="form-group p-2">
-            <label for="telefono">Telefono</label>
-            <input id="telefono" type="text" name="telefono" class="form-control" placeholder="Tú Telefono"/>
-         </div>
+         <% if ( rol === 'admin') { %> 
+            <div class="form-group p-2">
+               <label for="telefono">Telefono</label>
+               <input id="telefono" type="text" name="telefono" class="form-control" placeholder="Tú Telefono"/>
+            </div>
+         <% } %> 
          <input type="submit" value="Crear Usuario" class="btn btn-dark">
       </form>
       <% if (typeof error !== 'undefined') { %> 
